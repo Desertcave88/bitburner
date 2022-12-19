@@ -1,16 +1,17 @@
 /** @param {NS} ns */
 import { maxThreads } from '/RAS/functions.js';
 export async function main(ns) {
+	var RASserver = ns.args[0];
 	var filestring = ns.read('Serverlist.txt');
 	var serverlist = filestring.split(',');
 	for (var server in serverlist) {
-		var target = serverlist[server];
-		if ((ns.getServerMaxMoney(target) * .8) < (ns.getServerMoneyAvailable(target)) && (ns.getServerMaxMoney(target) > 0)) {
-			var threadcount = Math.round((ns.getServerMaxMoney(target) * .25) / ns.hackAnalyze(target));
-			threadcount = maxThreads(ns, '/RAS/hack.js', 'RAS-hack-01', threadcount);
+		var clientServer = serverlist[server];
+		if ((ns.getServerMaxMoney(clientServer) * .8) < (ns.getServerMoneyAvailable(clientServer)) && (ns.getServerMaxMoney(clientServer) > 0)) {
+			var threadcount = Math.round((ns.getServerMaxMoney(clientServer) * .25) / ns.hackAnalyze(clientServer));
+			threadcount = maxThreads(ns, '/RAS/hack.js', RASserver, threadcount);
 			if (threadcount > 0) {
-				ns.exec('/RAS/hack.js', 'RAS-hack-01', threadcount, target);
-			}
-		}
-	}
-}
+				ns.exec('/RAS/hack.js', RASserver, threadcount, clientServer);
+			};
+		};
+	};
+};
